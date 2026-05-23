@@ -21,12 +21,12 @@ const cairo = Cairo({
 });
 
 export const metadata: Metadata = {
-  title: "JudyTech — Menu",
-  description: "JudyTech digital menu — browse categories and items.",
-  keywords: ["JudyTech", "menu", "digital menu"],
+  title: "General Menu",
+  description: "General digital menu template — browse categories and items.",
+  keywords: ["menu", "digital menu", "general menu"],
   openGraph: {
-    title: "JudyTech Menu",
-    description: "Digital menu experience",
+    title: "General Menu",
+    description: "Digital menu template experience",
     type: "website",
   },
 };

@@ -14,13 +14,23 @@ const ThemeContext = createContext<ThemeContextType>({
   toggleTheme: () => {},
 });
 
+const THEME_STORAGE_KEY = "menu-theme";
+/** Prior storage key — migrated on read for existing browsers */
+const LEGACY_THEME_STORAGE_KEY = "b99-theme";
+
 export function ThemeProvider({ children }: { children: React.ReactNode }) {
   const [theme, setTheme] = useState<Theme>("light");
   const [mounted, setMounted] = useState(false);
 
   useEffect(() => {
     setMounted(true);
-    const stored = localStorage.getItem("b99-theme") as Theme | null;
+    let stored = localStorage.getItem(THEME_STORAGE_KEY) as Theme | null;
+    if (stored !== "dark" && stored !== "light") {
+      stored = localStorage.getItem(LEGACY_THEME_STORAGE_KEY) as Theme | null;
+      if ((stored === "dark" || stored === "light") && typeof window !== "undefined") {
+        localStorage.setItem(THEME_STORAGE_KEY, stored);
+      }
+    }
     if (stored === "dark" || stored === "light") {
       setTheme(stored);
     } else if (window.matchMedia("(prefers-color-scheme: dark)").matches) {
@@ -36,7 +46,7 @@ export function ThemeProvider({ children }: { children: React.ReactNode }) {
     } else {
       root.classList.remove("dark");
     }
-    localStorage.setItem("b99-theme", theme);
+    localStorage.setItem(THEME_STORAGE_KEY, theme);
   }, [theme, mounted]);
 
   const toggleTheme = () => setTheme((t) => (t === "light" ? "dark" : "light"));
